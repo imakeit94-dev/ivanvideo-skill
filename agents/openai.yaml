@@ -1,0 +1,7 @@
+interface:
+  display_name: "IvanVideo Skill"
+  short_description: "从策划、分镜到检查导出，制作可编辑的视频项目与样片"
+  default_prompt: "使用 $ivanvideo-skill 规划并制作一条视频，先整理需求、素材和分镜。"
+
+policy:
+  allow_implicit_invocation: true
