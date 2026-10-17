@@ -55,7 +55,7 @@ python3 <skill>/scripts/check_video.py <project> --video previews/sample-v1.mp4 
 
 默认使用内置 OFL 字体 Noto Sans SC，可配置 `font_path`、`font_name`；建议提供 TTF/OTF，其他字体格式须确认本机 libass/FreeType 支持。字体复制到项目时保留许可。字幕遵从配置的下方及左右安全区，换行由 libass 布局；程序没有验证所有字形覆盖、遮挡或阅读速度。ASS 控制字符反斜线和花括号显示为全角字形，不作为排版指令执行。
 
-导出 `.ass` 侧车文件保留可编辑字幕；正片为烧录字幕版本。字幕的边缘裁切、对比度与画面遮挡仍需实际审帧。
+导出 `.ass` 和 `.srt` 侧车文件保留可编辑字幕；正片为烧录字幕版本。字幕的边缘裁切、对比度与画面遮挡仍需实际审帧。自动句级配音排时见 narration-production.md；来自网页的媒体可用 capture_evidence 绑定实际捕获记录，见 software-capture.md。
 
 ## 工程携带与局部修改
 

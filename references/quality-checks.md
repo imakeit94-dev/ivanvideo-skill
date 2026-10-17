@@ -35,3 +35,5 @@ Provide timecodes or screenshots for issues. Fix the smallest relevant shot, rer
 当前内置动画的实测范围与未验证项见 [integration-validation.md](integration-validation.md)。
 
 整片流程见 [film-production.md](film-production.md)，声音流程见 [audio-production.md](audio-production.md)。第一批融合的回归与样片实测见 [stage1-validation.md](stage1-validation.md)。整片发布前的自动检查还包括准确帧数、全片解码、音轨时长、输入是否在渲染时变化、混音是否过期和编码后峰值；这些结果不代替产品真实性审阅或声音试听。
+
+中文 TTS、实测排时、句级同步和真实网页采集的验证见 [stage2-validation.md](stage2-validation.md)。生成时间线会核对口播脚本、分镜文字、音频及字幕时间；capture_evidence 核对源规范与媒体哈希。两类检查都不等同于自动词级对齐、听感验收或整项产品功能认证。

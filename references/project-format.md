@@ -27,6 +27,7 @@ Top-level fields:
 - `aspect_ratio` (`16:9`, `9:16`, or `1:1`), `width`, `height`, `fps`
 - `output` (`container`, `video_codec`, `path`)
 - `narration` (`enabled`, `voice`, `notes`, `audio_path`, `timing_path`)
+- Optional `narration.generated_timeline` is owned by the measured narration scheduler; it records script/manifest references, timing hash and generated track IDs. Do not forge hashes or manually move generated tracks; regenerate timing or explicitly adopt a manual workflow.
 - `safe_area` (`top`, `bottom`, `left`, `right` in pixels); bundled clip layout supports top/bottom only
 - `visual_system` (`palette`, `fonts`, `concept_colors`, `motion_notes`)
 - Optional `audio` (tracks, ducking, normalization, sample rate) and `subtitles`; missing fields preserve old behavior. Details: [audio-production.md](audio-production.md) and [film-production.md](film-production.md).
@@ -64,6 +65,8 @@ An optional `animation` object selects the built-in grammar, data, and cues. Its
 
 For the full-film renderer, each shot chooses exactly one `animation` or `media: {type, path, trim_in_seconds, fit}`. Media type is video or image. Custom components enter as rendered video. `audio_cues` can contain structured shot-local sound events, described in audio-production.md. `--film` adds the stricter renderability, subtitle and measured audio checks without changing planning-only validation.
 
+Optional `voice_timing` controls lead/gap/tail/reading-hold time during narration scheduling. Optional `capture_evidence: {report, asset_id}` binds a media shot to its actual capture report. Formats and commands: [narration-production.md](narration-production.md), [software-capture.md](software-capture.md).
+
 ## Narration timing
 
 `narration.timing_path` points to a JSON file such as `audio/timing.json`:
@@ -78,7 +81,7 @@ For the full-film renderer, each shot chooses exactly one `animation` or `media:
 }
 ```
 
-Times are global seconds from the start of the video. `method` records `manual`, `aligned`, or `draft`; draft estimates are not verified audio alignment. Segment ids are unique, allowing cue anchors to survive a text or timing revision. Retain the original narration file and alignment provenance.
+Times are global seconds from the start of the video. `method` records `manual`, `aligned`, `draft`, or `measured`. The scheduler's measured method has `granularity: sentence_clip`, meaning measured audio-clip intervals including pauses, never word/phoneme alignment. Draft estimates are not verified alignment. Segment IDs are unique, allowing cue anchors to survive a text or timing revision. Retain original narration and timing provenance.
 
 ## Editable animation snapshot
 

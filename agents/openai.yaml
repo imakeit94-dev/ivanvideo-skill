@@ -1,6 +1,6 @@
 interface:
   display_name: "IvanVideo Skill"
-  short_description: "从脚本与真实素材制作可编辑视频，内置动画、整片合成、字幕与基础混音"
+  short_description: "从脚本制作可编辑视频，支持中文配音、实测排时、真实网页采集、字幕与混音"
   default_prompt: "使用 $ivanvideo-skill 规划并制作一条视频，先整理需求、素材和分镜。"
 
 policy:

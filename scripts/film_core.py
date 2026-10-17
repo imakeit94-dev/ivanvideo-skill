@@ -130,6 +130,74 @@ def media_spec(root, shot):
             "sha256": digest(path)}
 
 
+def srt_text(segments):
+    def stamp(seconds):
+        ms = round(seconds * 1000)
+        return f"{ms // 3600000:02d}:{ms // 60000 % 60:02d}:{ms // 1000 % 60:02d},{ms % 1000:03d}"
+    return "\n\n".join(f"{i}\n{stamp(c['start_seconds'])} --> {stamp(c['end_seconds'])}\n{c['text']}"
+                       for i, c in enumerate(segments, 1)) + "\n"
+
+
+def verify_generated_narration(root, config):
+    state = config.get("narration", {}).get("generated_timeline")
+    if state is None:
+        return {}
+    keys(state, ("script_path", "manifest_path", "timing_sha256", "track_ids"), "generated_timeline")
+    from narrate import verify_manifest
+    script = local(root, state["script_path"])
+    manifest_path = local(root, state["manifest_path"])
+    manifest = verify_manifest(root, manifest_path, script)
+    board = read(root / "storyboard.json")
+    known_shots = {shot["id"] for shot in board["shots"]}
+    if any(part["shot_id"] not in known_shots for part in manifest["segments"]):
+        raise ValueError("Generated narration refers to an unknown storyboard shot")
+    for shot in board["shots"]:
+        parts = [p for p in manifest["segments"] if p["shot_id"] == shot["id"]]
+        if "".join(shot.get("narration", "").split()) != "".join("".join(p["text"] for p in parts).split()):
+            raise ValueError("Storyboard narration changed; reconcile the script and regenerate the schedule")
+    timing = local(root, config["narration"]["timing_path"])
+    if digest(timing) != state["timing_sha256"]:
+        raise ValueError("Generated narration timing changed; regenerate schedule or explicitly switch to manual timing")
+    subtitles = config.get("subtitles", {})
+    if subtitles.get("enabled") and local(root, subtitles.get("timing_path") or config["narration"]["timing_path"]) != timing:
+        raise ValueError("Generated narration and enabled subtitles must share their timing source")
+    segments = read(timing)["segments"]
+    tracks = config.get("audio", {}).get("tracks", [])
+    if len(segments) != len(manifest["segments"]) or len(state["track_ids"]) != len(segments):
+        raise ValueError("Generated voice/caption segment count differs")
+    for segment, part, track_id in zip(segments, manifest["segments"], state["track_ids"]):
+        matches = [t for t in tracks if t.get("id") == track_id]
+        if len(matches) != 1:
+            raise ValueError("Generated voice track is missing or duplicated")
+        track = matches[0]
+        if (segment["id"] != part["id"] or segment["text"] != part["text"] or track.get("role") != "voice"
+                or track.get("path") != part["path"] or abs(track.get("at_seconds", -1) - segment["start_seconds"]) > 1e-8
+                or track.get("trim_in_seconds", 0) != 0 or track.get("duration_seconds") is not None
+                or abs(segment["end_seconds"] - segment["start_seconds"] - part["audio"]["duration_seconds"]) > 1e-8):
+            raise ValueError("Generated voice and sentence captions no longer match; regenerate the schedule")
+    return {"narration_script": digest(script), "narration_manifest": digest(manifest_path), "narration_timing": digest(timing)}
+
+
+def verify_capture(root, shot, media):
+    evidence = shot.get("capture_evidence")
+    if evidence is None:
+        return {}
+    keys(evidence, ("report", "asset_id"), "capture_evidence")
+    report_path = local(root, evidence["report"])
+    report = read(report_path)
+    if report.get("display_mode") != "real_capture":
+        raise ValueError("Capture evidence must describe an actual capture")
+    if digest(local(root, report["spec_path"])) != report["spec_sha256"]:
+        raise ValueError("Capture specification changed; recapture or retain its original version")
+    matches = [a for a in report["assets"] if a["id"] == evidence["asset_id"]]
+    if len(matches) != 1 or media["type"] not in ("image", "video"):
+        raise ValueError("Shot capture asset ID is missing or ambiguous")
+    asset = matches[0]
+    if local(root, asset["path"]) != Path(media["path"]) or asset["sha256"] != media["sha256"] or asset["type"] != media["type"]:
+        raise ValueError("Shot media differs from its real capture evidence")
+    return {"capture-" + shot["id"]: digest(report_path)}
+
+
 def build_timeline(root):
     """Compile authoring seconds to absolute frame boundaries; no files are written."""
     root = Path(root).expanduser().resolve()
@@ -157,6 +225,7 @@ def build_timeline(root):
     if config.get("output", {}).get("container", "mp4") != "mp4" or config.get("output", {}).get("video_codec", "h264") != "h264":
         raise ValueError("The film renderer currently supports MP4/H.264 only")
     dependencies = {"project.json": digest(root / "project.json"), "storyboard.json": digest(root / "storyboard.json")}
+    dependencies.update(verify_generated_narration(root, config))
     shots = board.get("shots")
     if not isinstance(shots, list) or not shots:
         raise ValueError("Film compilation needs a non-empty shots array")
@@ -209,7 +278,7 @@ def build_timeline(root):
                 if item.get("image") and not item["image"].startswith("data:"):
                     source_hashes[item["image"]] = digest(item["image"])
             if raw.get("timing_file"):
-                source_hashes["timing"] = digest(path.parent / raw["timing_file"])
+                source_hashes["timing"] = digest((path.parent / raw["timing_file"]).resolve())
             cache = identity({"raw": raw, "media": source_hashes, "engine": engine_hash,
                               "renderer": digest(Path(__file__).with_name("render_animation.py")),
                               "spec_contract": digest(Path(__file__).with_name("animation_spec.py"))})
@@ -221,6 +290,7 @@ def build_timeline(root):
             dependencies[label] = media["sha256"]
         else:
             raise ValueError(label + " needs media or animation; descriptions alone cannot be rendered")
+        dependencies.update(verify_capture(root, shot, media))
         current = {"id": label, "start_seconds": start, "end_seconds": end, "start_frame": first,
                    "end_frame": last, "frames": last - first, "overlap_frames": overlap, "media": media}
         compiled.append(current)
@@ -241,8 +311,8 @@ def build_timeline(root):
         if not isinstance(value, dict):
             raise ValueError("Subtitle timing must be an object")
         dependencies["subtitle_timing"] = digest(timing)
-        if value.get("method") not in ("manual", "aligned", "draft"):
-            raise ValueError("Subtitle timing must record manual, aligned or draft method")
+        if value.get("method") not in ("manual", "aligned", "draft", "measured"):
+            raise ValueError("Subtitle timing must record manual, aligned, draft or measured method")
         segments = value.get("segments")
         if not isinstance(segments, list) or not segments:
             raise ValueError("Enabled subtitles need non-empty timing segments")

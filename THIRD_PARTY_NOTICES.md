@@ -15,3 +15,5 @@ The local source distribution did not include a Git commit identifier. Its per-f
 ## Stage 1 production methods
 
 The original IvanVideo film compiler, FFmpeg assembler and mixer, and supporting production references were informed by studying the locally installed `video-shotcraft` (shot and sound planning), `guizang-product-video-skill` (product evidence and audio review), and `humanizer-zh` (Chinese editing) workflows. No executable code, templates, audio, product assets or license text from those three packages is bundled in this stage. Their licenses do not replace the licenses of the separately retained Huashu runtime and fonts above.
+
+The stage 2 narration/cache/scheduling and browser capture tools are also original IvanVideo implementations. They invoke separately installed macOS speech tools, FFmpeg and Playwright/Chromium; no system voices, browser binaries, third-party TTS SDKs or captured product media are redistributed with this Skill. Generated and captured media retain their project-specific provenance and usage conditions.

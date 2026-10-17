@@ -9,14 +9,15 @@ import tempfile
 from pathlib import Path
 
 from film_core import (audio_plan, build_timeline, digest, duration, engine_path, identity,
-                       output_path, probe, read, run, subtitle_font, tool, write)
+                       output_path, probe, read, run, srt_text, subtitle_font, tool, write)
 from mix_audio import create_mix, measure, verify_mix
 
 
 def snapshot(root, captions):
     scripts = Path(__file__).parent
     names = ("film_core.py", "compile_timeline.py", "mix_audio.py", "render_film.py",
-             "render_animation.py", "animation_spec.py", "validate_video_project.py", "check_video.py")
+             "render_animation.py", "animation_spec.py", "validate_video_project.py", "check_video.py",
+             "narrate.py", "schedule_narration.py", "capture_web.py")
     version = identity({name: digest(scripts / name) for name in names})[:16]
     target = output_path(root, f"scripts/ivanvideo_film/{version}")
     target.mkdir(parents=True, exist_ok=True)
@@ -232,6 +233,7 @@ def main():
         write(output.with_suffix(".film.json"), report)
         if timeline["captions"]:
             shutil.copy2(staging / "subtitles.ass", output.with_suffix(".ass"))
+            output.with_suffix(".srt").write_text(srt_text(timeline["captions"]), encoding="utf-8")
     print(json.dumps({"output": str(output), "report": str(output.with_suffix('.film.json')), "frames": timeline["frames"],
                       "runtime": str(runtime)}, ensure_ascii=False, indent=2))
     return 0

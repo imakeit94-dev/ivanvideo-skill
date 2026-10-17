@@ -40,4 +40,6 @@ Set a representative keyframe before animating: composition, semantic colors, te
 
 Use actual narration alignment to anchor visual cues to words or sentence boundaries. Mark manually timed and estimated segments honestly. Count reading time after the complete list/diagram is visible. Keep numbers, units, and semantic colors consistent across zooms, transitions, and labels.
 
+For measured sentence audio, follow narration-production.md: preview timing changes, preserve revisions and regenerate captions/voice tracks together. Sentence-clip timing only supports sentence boundaries, not verified word timing. Real web UI materials can be captured through software-capture.md and bound to their evidence report; keep native-app limitations explicit.
+
 When a revision repeats the same failure, log the timecode, root cause, attempted fix, and observed result. After repeated ineffective fixes, revisit the input assets, storyboard, or renderer capability instead of adding more visual rules. Freeze approved code, timeline, audio mix, and subtitles together. Private project feedback stays local to the project; only general methods with evidence belong in the public Skill.
