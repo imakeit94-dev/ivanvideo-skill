@@ -198,6 +198,19 @@ def verify_capture(root, shot, media):
     return {"capture-" + shot["id"]: digest(report_path)}
 
 
+def verify_asset(root, shot, media):
+    evidence = shot.get("asset_evidence")
+    if evidence is None:
+        return {}
+    keys(evidence, ("id",), "asset_evidence")
+    from asset_workflow import registered_asset
+    item = registered_asset(root, evidence["id"])
+    if (local(root, item["path"]) != Path(media["path"]) or item["media_type"] != media["type"]
+            or item["sha256"] != media.get("sha256")):
+        raise ValueError("Shot media differs from its registered asset")
+    return {"asset-" + shot["id"]: identity(item)}
+
+
 def build_timeline(root):
     """Compile authoring seconds to absolute frame boundaries; no files are written."""
     root = Path(root).expanduser().resolve()
@@ -291,6 +304,7 @@ def build_timeline(root):
         else:
             raise ValueError(label + " needs media or animation; descriptions alone cannot be rendered")
         dependencies.update(verify_capture(root, shot, media))
+        dependencies.update(verify_asset(root, shot, media))
         current = {"id": label, "start_seconds": start, "end_seconds": end, "start_frame": first,
                    "end_frame": last, "frames": last - first, "overlap_frames": overlap, "media": media}
         compiled.append(current)

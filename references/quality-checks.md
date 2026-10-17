@@ -37,3 +37,5 @@ Provide timecodes or screenshots for issues. Fix the smallest relevant shot, rer
 整片流程见 [film-production.md](film-production.md)，声音流程见 [audio-production.md](audio-production.md)。第一批融合的回归与样片实测见 [stage1-validation.md](stage1-validation.md)。整片发布前的自动检查还包括准确帧数、全片解码、音轨时长、输入是否在渲染时变化、混音是否过期和编码后峰值；这些结果不代替产品真实性审阅或声音试听。
 
 中文 TTS、实测排时、句级同步和真实网页采集的验证见 [stage2-validation.md](stage2-validation.md)。生成时间线会核对口播脚本、分镜文字、音频及字幕时间；capture_evidence 核对源规范与媒体哈希。两类检查都不等同于自动词级对齐、听感验收或整项产品功能认证。
+
+配图、可选 AI 视频素材与封面按 [asset-production.md](asset-production.md)、[cover-production.md](cover-production.md) 检查。自动验证真实文件、来源哈希、图片/视频类型、完整解码和封面文字边界；人工审核生成伪影、技术事实、标题准确性、缩略图可读性和使用条件。任务 ID 或提示词不可当作完成的视频。第三批实测范围见 [stage3-validation.md](stage3-validation.md)。

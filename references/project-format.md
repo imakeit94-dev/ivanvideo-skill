@@ -94,3 +94,7 @@ When the user approves a version, record the matching code revision, storyboard,
 ## Asset manifest
 
 `assets/manifest.json` is an array of items containing `path`, `media_type`, `role`, `source`, `license`, and `status` (`available`, `missing`, `needs_review`). Include references to externally located media without silently copying it.
+
+Optional planned image/video generation uses `references/asset-plan.json`; versioned requests stay under `references/asset-requests/`. Imported returned files add `id`, `sha256`, measured `media`, `provenance` and pending `review` fields to this same array. Old manifest entries remain valid. Unlike the initializer's external indexing, explicit `asset_workflow.py register` copies the selected real file into project-local `assets/media/`. A shot's optional `asset_evidence: {"id":"A01"}` binds its media path/type/hash to that entry and its original request. See [asset-production.md](asset-production.md).
+
+Optional `references/cover.json` selects a registered image, editable title, palette and dimensions per variant. Cover bundles under `outputs/covers/` or a named version contain PNG, HTML, image/font assets, configuration and `covers.json`; they are separate from the film's frame rate and dimensions. See [cover-production.md](cover-production.md).
