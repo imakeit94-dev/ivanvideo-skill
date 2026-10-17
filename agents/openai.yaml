@@ -1,6 +1,6 @@
 interface:
   display_name: "IvanVideo Skill"
-  short_description: "从策划、分镜到检查导出，制作可编辑的视频项目与样片"
+  short_description: "将脚本、口播与八种动画整合为可编辑视频，支持样片审阅与质量检查"
   default_prompt: "使用 $ivanvideo-skill 规划并制作一条视频，先整理需求、素材和分镜。"
 
 policy:

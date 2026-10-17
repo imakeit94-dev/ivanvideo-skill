@@ -2,6 +2,7 @@
 """Create a non-destructive IvanVideo Skill project skeleton."""
 import argparse
 import json
+import math
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
@@ -20,20 +21,30 @@ def main() -> int:
     parser.add_argument("--duration", type=float, default=None, help="Requested duration in seconds")
     parser.add_argument("--language", default=None)
     parser.add_argument("--platform", default=None)
-    parser.add_argument("--aspect-ratio", choices=("16:9", "9:16", "1:1"), default="16:9")
-    parser.add_argument("--width", type=int, default=1920)
-    parser.add_argument("--height", type=int, default=1080)
+    parser.add_argument("--aspect-ratio", choices=("16:9", "9:16", "1:1"), default=None)
+    parser.add_argument("--width", type=int, default=None)
+    parser.add_argument("--height", type=int, default=None)
     parser.add_argument("--fps", type=int, default=30)
     args = parser.parse_args()
 
     output = args.output.expanduser().resolve()
-    if output.exists() and any(output.iterdir()):
+    if output.exists() and (not output.is_dir() or any(output.iterdir())):
         print(f"Refusing to initialize a non-empty directory: {output}", file=sys.stderr)
         return 2
-    if args.duration is not None and args.duration <= 0:
+    if args.duration is not None and (not math.isfinite(args.duration) or args.duration <= 0):
         parser.error("--duration must be greater than zero")
+    if (args.width is None) != (args.height is None):
+        parser.error("Provide both --width and --height, or neither")
+    defaults = {"16:9": (1920, 1080), "9:16": (1080, 1920), "1:1": (1080, 1080)}
+    if args.width is None:
+        args.width, args.height = defaults[args.aspect_ratio or "16:9"]
     if args.width <= 0 or args.height <= 0 or args.fps <= 0:
         parser.error("width, height, and fps must be greater than zero")
+    divisor = math.gcd(args.width, args.height)
+    actual_ratio = f"{args.width // divisor}:{args.height // divisor}"
+    if args.aspect_ratio and args.aspect_ratio != actual_ratio:
+        parser.error("--aspect-ratio conflicts with width and height")
+    args.aspect_ratio = actual_ratio
 
     roots = [p.expanduser().resolve() for p in args.assets]
     missing_roots = [str(p) for p in roots if not p.exists()]
@@ -54,7 +65,9 @@ def main() -> int:
         "duration_seconds": args.duration, "language": args.language, "platform": args.platform,
         "aspect_ratio": args.aspect_ratio, "width": args.width, "height": args.height, "fps": args.fps,
         "output": {"container": "mp4", "video_codec": "h264", "path": "outputs/final.mp4"},
-        "narration": {"enabled": None, "voice": None, "notes": ""},
+        "narration": {"enabled": None, "voice": None, "notes": "", "audio_path": None, "timing_path": None},
+        "safe_area": {"top": 0, "bottom": 0, "left": 0, "right": 0},
+        "visual_system": {"palette": [], "fonts": [], "concept_colors": {}, "motion_notes": ""},
         "reference_videos": [], "asset_roots": [str(p) for p in roots],
         "missing_items": missing_roots, "assumptions": [], "status": "brief", "created_at": datetime.now(timezone.utc).isoformat()
     }

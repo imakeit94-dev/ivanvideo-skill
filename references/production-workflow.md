@@ -29,3 +29,11 @@ Inspect the project and installed tooling before coding. Prefer existing compone
 The sample should demonstrate the intended motion language, caption hierarchy, transitions, and sound treatment; use representative content rather than placeholder blocks wherever possible. Keep it short enough for a fast style decision. After approval, build the remaining shots against the approved storyboard. Synchronize narration, captions, and visual actions. Mix music so speech remains clear and avoid effects without an expressive purpose.
 
 For timestamped feedback, identify the affected shot and make the narrowest change that satisfies it. Keep prior approved shots and notes intact; record changed decisions in the project log.
+
+## Frame-first and narration-led production
+
+Set a representative keyframe before animating: composition, semantic colors, text hierarchy, subtitle region, and one clear focus. Select the animation grammar by what the narration is doing. Reuse the built-in runtime through animation-production.md; the user need not invoke another Skill. Choose purposeful continuous motion or deliberate holds according to the shot, without imposing a universal motion quota.
+
+Use actual narration alignment to anchor visual cues to words or sentence boundaries. Mark manually timed and estimated segments honestly. Count reading time after the complete list/diagram is visible. Keep numbers, units, and semantic colors consistent across zooms, transitions, and labels.
+
+When a revision repeats the same failure, log the timecode, root cause, attempted fix, and observed result. After repeated ineffective fixes, revisit the input assets, storyboard, or renderer capability instead of adding more visual rules. Freeze approved code, timeline, audio mix, and subtitles together. Private project feedback stays local to the project; only general methods with evidence belong in the public Skill.

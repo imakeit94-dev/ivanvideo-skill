@@ -1,0 +1,13 @@
+# Third-party notices
+
+IvanVideo includes a selected, adapted snapshot of **huashu-art-motion** by **alchaincyf (花叔 · 花生)**, from https://github.com/alchaincyf/huashu-art-motion.
+
+- `assets/animation-engine/`: the clip runtime, shared drawing libraries, eight parameterized grammars, and an adapted clip QA tool.
+- `references/animation-grammars.md`: adapted grammar interface documentation.
+- Keyframe-first design, narration cues, grammar selection, semantic colors, evidence-based review, and project-local feedback inform IvanVideo's production guidance.
+
+The upstream software and documentation use the **MIT License, Copyright (c) 2026 alchaincyf (花叔 · 花生)**. The full notice is retained at `assets/animation-engine/LICENSE.huashu`.
+
+The bundled fonts retain their separate **SIL Open Font License 1.1** notices in `assets/animation-engine/lib/fonts/LICENSES.md` and `OFL.txt`. Only the font families used by this clip runtime are included. The table also documents other fonts from the upstream distribution.
+
+The local source distribution did not include a Git commit identifier. Its per-file source hashes and adaptation notes are recorded in `assets/animation-engine/PROVENANCE.json`. IvanVideo does not claim authorship of these upstream components. Project media, brand assets, private feedback, and reference-film character/audio assets are not part of this snapshot.
