@@ -28,6 +28,6 @@ description: Plan and produce editable code-driven videos from a brief and asset
 
 ## 工具边界
 
-Python 3 可做初始化与输入校验；内置渲染还需 FFmpeg、FFprobe、Playwright 和 Chromium，片段 QA 另需 NumPy/Pillow。先检查已有工具；缺项说明清楚，不自动安装大型框架或配置 API。配音、AI 生图/生视频依赖用户已有服务，按可用能力执行并标明来源。调用其他已安装工具的工作由本 Skill 编排，不要求用户切换 Skill。
+Python 3 可做初始化与输入校验；内置渲染还需 FFmpeg、FFprobe、Playwright 和 Chromium，片段 QA 另需 NumPy/Pillow。先检查已有工具；涉及 Remotion 时优先复用已安装的官方 Skills 和现有组件，核实来源，不将普通本地 Skill 称为官方。缺项说明清楚，不自动安装大型框架或配置 API。配音、AI 生图/生视频依赖用户已有服务，按可用能力执行并标明来源。调用其他已安装工具的工作由本 Skill 编排，不要求用户切换 Skill。
 
 内置片段引擎保留花叔的 MIT 署名和字体许可，来源见 `THIRD_PARTY_NOTICES.md`。它提供八种讲解动画的基础能力；复杂空间推导、特定品牌 UI 和真实角色表演仍需项目专属实现。
