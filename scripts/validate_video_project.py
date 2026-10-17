@@ -23,6 +23,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project", type=Path, help="Video project directory")
     parser.add_argument("--delivery", action="store_true", help="Require complete timeline and all referenced assets")
+    parser.add_argument("--film", action="store_true", help="Also compile renderable media, transitions, subtitles and measured audio (requires FFprobe for audio)")
     args = parser.parse_args()
     root = args.project.expanduser().resolve()
     errors: list[str] = []
@@ -90,6 +91,17 @@ def main() -> int:
                 normalize(raw, path.parent)
             except (ValueError, OSError, KeyError, TypeError) as exc:
                 errors.append(f"{label} animation: {exc}")
+        if "media" in shot:
+            try:
+                from film_core import media_spec
+                media_spec(root, shot)
+            except (ValueError, OSError, KeyError, TypeError) as exc:
+                # Missing media may remain explicitly declared during planning.
+                pending = isinstance(shot.get("media"), dict) and any(
+                    isinstance(item, dict) and item.get("path") == shot["media"].get("path") and item.get("status") == "missing"
+                    for item in (assets if isinstance(assets, list) else []))
+                if args.delivery or args.film or not pending or "Missing media:" not in str(exc):
+                    errors.append(f"{label} media: {exc}")
     normalized.sort()
     for current, following in zip(normalized, normalized[1:]):
         if following[0] < current[1] - 0.001:
@@ -129,6 +141,12 @@ def main() -> int:
                 errors.append(f"{shot.get('id')} assets must list project-relative or absolute paths")
             elif not (root / path).expanduser().exists() and (args.delivery or path not in declared_missing):
                 errors.append(f"{shot.get('id')} references a missing asset: {path}")
+    if args.film and not errors:
+        try:
+            from film_core import audio_plan, build_timeline
+            audio_plan(root, build_timeline(root))
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            errors.append("Film inputs: " + str(exc))
     if errors:
         print("Project validation failed:", file=sys.stderr)
         for error in errors:

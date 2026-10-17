@@ -123,7 +123,8 @@ def main():
         raise ValueError("Project animation-engine is incomplete; existing sources were preserved")
     runtime = root / "scripts/ivanvideo_runtime"
     runtime.mkdir(parents=True, exist_ok=True)
-    for name in ("render_animation.py", "animation_spec.py", "validate_video_project.py", "check_video.py"):
+    for name in ("render_animation.py", "animation_spec.py", "validate_video_project.py", "check_video.py",
+                 "film_core.py", "compile_timeline.py", "mix_audio.py", "render_film.py"):
         source_script = Path(__file__).with_name(name)
         target = runtime / name
         if not target.exists():

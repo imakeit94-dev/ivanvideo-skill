@@ -29,6 +29,7 @@ Top-level fields:
 - `narration` (`enabled`, `voice`, `notes`, `audio_path`, `timing_path`)
 - `safe_area` (`top`, `bottom`, `left`, `right` in pixels); bundled clip layout supports top/bottom only
 - `visual_system` (`palette`, `fonts`, `concept_colors`, `motion_notes`)
+- Optional `audio` (tracks, ducking, normalization, sample rate) and `subtitles`; missing fields preserve old behavior. Details: [audio-production.md](audio-production.md) and [film-production.md](film-production.md).
 - `reference_videos`, `asset_roots`, `missing_items`, `assumptions`, `status`, `created_at`
 
 Use `null` or an empty array for unknown values; preserve user supplied values. Do not pretend that a missing preference was specified.
@@ -61,6 +62,8 @@ For intentional overlap, put `transition_in: {"from": "S01", "duration_seconds":
 
 An optional `animation` object selects the built-in grammar, data, and cues. Its media paths are relative to the project root. Details are in [animation-production.md](animation-production.md). Shots without this object may use screen recordings, custom components, or other renderers. `assets` lists file paths; they must resolve or be marked missing in the manifest during planning. `validate_video_project.py --delivery` requires all referenced assets and a complete timeline.
 
+For the full-film renderer, each shot chooses exactly one `animation` or `media: {type, path, trim_in_seconds, fit}`. Media type is video or image. Custom components enter as rendered video. `audio_cues` can contain structured shot-local sound events, described in audio-production.md. `--film` adds the stricter renderability, subtitle and measured audio checks without changing planning-only validation.
+
 ## Narration timing
 
 `narration.timing_path` points to a JSON file such as `audio/timing.json`:
@@ -80,6 +83,8 @@ Times are global seconds from the start of the video. `method` records `manual`,
 ## Editable animation snapshot
 
 The first animation render adds `src/animation-engine/` (including license notices), `src/clips/`, and `scripts/ivanvideo_runtime/`. Store sample MP4/PNG and `.render.json` records in `previews/`; keep release exports in `outputs/`. The engine snapshot stays with the project and is not overwritten when the global Skill changes.
+
+Full-film rendering additionally saves a versioned tool snapshot under `scripts/ivanvideo_film/`, optional subtitle fonts under `src/film-fonts/`, cached animation clips under `previews/film-clips/`, and reconstructible `src/timeline.compiled.json`. Authoring sources stay project.json/storyboard.json. Audio bundles include stems, master and hash/measurement records. The film's `.film.json` retains compiled timing, output/mix hashes, runtime version and pending manual review; `.ass` retains editable burned-in caption text/timing.
 
 When the user approves a version, record the matching code revision, storyboard, narration, subtitle file and mix settings together. Keep private feedback and exploratory notes in the project. Promote reusable methods only after demonstrated success, and obtain agreement before changing a shared template library.
 

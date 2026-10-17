@@ -6,6 +6,9 @@ Run machine checks when the tool can determine the result reliably; record comma
 
 ```sh
 python3 <skill>/scripts/validate_video_project.py <project> --delivery
+# When using the full-film pipeline:
+python3 <skill>/scripts/validate_video_project.py <project> --delivery --film
+python3 <skill>/scripts/render_film.py <project> --check
 uv run --with playwright --with numpy --with pillow python <skill>/scripts/render_animation.py <project> --shot S01 --out previews/S01-v1.mp4 --qa
 python3 <skill>/scripts/check_video.py <project> --video outputs/final.mp4 --detect --frames
 ```
@@ -30,3 +33,5 @@ Watch the video at full size and listen through headphones/speakers. Check capti
 Provide timecodes or screenshots for issues. Fix the smallest relevant shot, rerender, and recheck adjacent transitions and audio sync. Record automated and human checks separately; never claim a visual or listening review that did not happen.
 
 当前内置动画的实测范围与未验证项见 [integration-validation.md](integration-validation.md)。
+
+整片流程见 [film-production.md](film-production.md)，声音流程见 [audio-production.md](audio-production.md)。第一批融合的回归与样片实测见 [stage1-validation.md](stage1-validation.md)。整片发布前的自动检查还包括准确帧数、全片解码、音轨时长、输入是否在渲染时变化、混音是否过期和编码后峰值；这些结果不代替产品真实性审阅或声音试听。

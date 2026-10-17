@@ -13,12 +13,13 @@ from pathlib import Path
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("project", type=Path)
-    parser.add_argument("--video", default="outputs/final.mp4", help="Project-relative video file")
+    parser.add_argument("--video", help="Project-relative video; defaults to project.output.path")
     parser.add_argument("--detect", action="store_true", help="Flag black/silent intervals; these need human interpretation")
     parser.add_argument("--frames", action="store_true", help="Extract frames around planned shot boundaries")
     args = parser.parse_args()
     root = args.project.expanduser().resolve()
-    path = (root / args.video).resolve()
+    config = json.loads((root / "project.json").read_text(encoding="utf-8"))
+    path = (root / (args.video or config.get("output", {}).get("path", "outputs/final.mp4"))).resolve()
     if not path.is_relative_to(root):
         raise ValueError("Video must be inside the video project")
     if not path.is_file() or not path.stat().st_size:
@@ -26,7 +27,6 @@ def main():
     ffprobe, ffmpeg = shutil.which("ffprobe"), shutil.which("ffmpeg")
     if not ffprobe or not ffmpeg:
         raise ValueError("FFmpeg and FFprobe are required")
-    config = json.loads((root / "project.json").read_text(encoding="utf-8"))
     meta = json.loads(subprocess.check_output([ffprobe, "-v", "error", "-show_format", "-show_streams", "-of", "json", str(path)]))
     video = next(s for s in meta["streams"] if s["codec_type"] == "video")
     audio = [s for s in meta["streams"] if s["codec_type"] == "audio"]
@@ -42,8 +42,25 @@ def main():
     expected = config.get("duration_seconds")
     if expected is not None and abs(duration - expected) > max(1 / fps, 0.05):
         errors.append("Video duration differs from project.json")
-    if config.get("narration", {}).get("enabled") and not audio:
-        errors.append("Narration is enabled but no audio stream exists")
+    if (config.get("narration", {}).get("enabled") or config.get("audio", {}).get("tracks")) and not audio:
+        errors.append("Audio was configured but no audio stream exists")
+    film_receipt = path.with_suffix(".film.json")
+    if film_receipt.is_file():
+        try:
+            from film_core import build_timeline, digest, output_path
+            from mix_audio import verify_mix
+            receipt = json.loads(film_receipt.read_text(encoding="utf-8"))
+            timeline = build_timeline(root)
+            if receipt.get("output_sha256") != digest(path):
+                errors.append("Film differs from its saved output hash")
+            if receipt.get("timeline", {}).get("fingerprint") != timeline["fingerprint"]:
+                errors.append("Film is stale relative to its authoring inputs")
+            if receipt.get("mix"):
+                master, _ = verify_mix(root, timeline, output_path(root, receipt["mix"]))
+                if digest(master) != receipt.get("master_sha256"):
+                    errors.append("Film was rendered with a different master")
+        except (ValueError, OSError, KeyError, TypeError) as exc:
+            errors.append("Film provenance check failed: " + str(exc))
     for stream in audio:
         if stream.get("duration") and abs(float(stream["duration"]) - duration) > max(1 / fps, 0.1):
             errors.append("Audio/video durations differ; inspect the track ending")

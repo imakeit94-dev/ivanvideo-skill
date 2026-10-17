@@ -18,6 +18,8 @@ Produce a content outline, complete script, narration, timed shot list, on-scree
 
 Show the script and storyboard for review before rendering a full video. A short sample is the next review gate. Do not treat an outline or static storyboard as approval to produce the full video.
 
+Honor explicit authorization already given for continuous production or a technical test; do not add a new approval gate to those tasks. For Chinese narration, use narration-editing.md before the existing script review. For real software promotion, use product-evidence.md to connect claims and shots to actual versions and behavior.
+
 ## Visual system and implementation
 
 Choose a consistent design system appropriate to the brief: type, palette, spacing, corner radius, shadows, safe areas, caption treatment, transition vocabulary, and motion timing. Possible directions include technology business, real software UI, kinetic typography, keynote UI, editorial explainer, science animation, and corporate film. They are options, not presets to apply blindly.
@@ -27,6 +29,8 @@ Inspect the project and installed tooling before coding. Prefer existing compone
 ## Sample, full edit, and changes
 
 The sample should demonstrate the intended motion language, caption hierarchy, transitions, and sound treatment; use representative content rather than placeholder blocks wherever possible. Keep it short enough for a fast style decision. After approval, build the remaining shots against the approved storyboard. Synchronize narration, captions, and visual actions. Mix music so speech remains clear and avoid effects without an expressive purpose.
+
+For multi-shot delivery, follow film-production.md and audio-production.md. Keep the existing authoring files as the source; compiled timing and mix bundles are derived artifacts. A rendered/decoded file establishes technical readability, while listening and product authenticity remain separate reviews.
 
 For timestamped feedback, identify the affected shot and make the narrowest change that satisfies it. Keep prior approved shots and notes intact; record changed decisions in the project log.
 

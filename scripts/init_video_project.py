@@ -66,6 +66,8 @@ def main() -> int:
         "aspect_ratio": args.aspect_ratio, "width": args.width, "height": args.height, "fps": args.fps,
         "output": {"container": "mp4", "video_codec": "h264", "path": "outputs/final.mp4"},
         "narration": {"enabled": None, "voice": None, "notes": "", "audio_path": None, "timing_path": None},
+        "audio": {"sample_rate": 48000, "tracks": [], "ducking": {"enabled": False}, "normalization": None},
+        "subtitles": {"enabled": False},
         "safe_area": {"top": 0, "bottom": 0, "left": 0, "right": 0},
         "visual_system": {"palette": [], "fonts": [], "concept_colors": {}, "motion_notes": ""},
         "reference_videos": [], "asset_roots": [str(p) for p in roots],
