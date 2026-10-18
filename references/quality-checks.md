@@ -39,3 +39,5 @@ Provide timecodes or screenshots for issues. Fix the smallest relevant shot, rer
 中文 TTS、实测排时、句级同步和真实网页采集的验证见 [stage2-validation.md](stage2-validation.md)。生成时间线会核对口播脚本、分镜文字、音频及字幕时间；capture_evidence 核对源规范与媒体哈希。两类检查都不等同于自动词级对齐、听感验收或整项产品功能认证。
 
 配图、可选 AI 视频素材与封面按 [asset-production.md](asset-production.md)、[cover-production.md](cover-production.md) 检查。自动验证真实文件、来源哈希、图片/视频类型、完整解码和封面文字边界；人工审核生成伪影、技术事实、标题准确性、缩略图可读性和使用条件。任务 ID 或提示词不可当作完成的视频。第三批实测范围见 [stage3-validation.md](stage3-validation.md)。
+
+已有口播包装按 [broll-production.md](broll-production.md) 检查。自动验证 SRT/母版哈希、区间与帧数、声音定位与播放时钟、同引擎画面、字幕区域溢出及部分文字与叠加区域相交。干净交付再核对无音轨、完整解码与替换表。缓存文字、图形遮挡和听感仍需人工审核；本批记录见 [stage4-validation.md](stage4-validation.md)。

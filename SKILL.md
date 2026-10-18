@@ -1,11 +1,13 @@
 ---
 name: ivanvideo-skill
-description: Plan and produce editable code-driven videos with animation, Chinese narration, real UI capture, illustrations, optional AI video assets, covers, captions and audio mixing. Use for product videos, Chinese technology news, technical education, reference-video analysis, review, and export.
+description: Plan and produce editable videos with animation, Chinese narration, real UI capture, assets, covers, captions and mixing. Use for product videos, technology news, technical education, reference analysis, or SRT-based B-roll with audio-synced review and clip delivery.
 ---
 
 # IvanVideo Skill
 
 从需求、素材和参考片开始，完成可审核、可修改的视频工程。用户只需调用本 Skill；动画方法、八种参数化语法及检查工具已内置，无需另装或手动调用 huashu-art-motion。制作文件放在用户选定的工程目录。
+
+已有母版与 SRT、只需要补充口播包装时，按 [broll-production.md](references/broll-production.md) 走导入/选段、声音同步预览、叠加检查和片段交付；保留原旁白及时间位置，镜头仍在 storyboard.json 中编辑。
 
 ## 制作流程
 
@@ -33,6 +35,7 @@ description: Plan and produce editable code-driven videos with animation, Chines
 - [references/software-capture.md](references/software-capture.md)：网页实际采集、操作断言、录屏与逐镜头来源绑定。需要真实网页素材时读。
 - [references/asset-production.md](references/asset-production.md)：配图规划、可选 AI 视频服务、提示词、真实文件导入与逐镜头素材校验。
 - [references/cover-production.md](references/cover-production.md)：三种画幅的封面、可编辑标题、字体与图像留档及检查。
+- [references/broll-production.md](references/broll-production.md)：已有 SRT 和母版的口播包装、可拖动预览、头像/字幕区域和替换对照表。
 
 ## 工具边界
 

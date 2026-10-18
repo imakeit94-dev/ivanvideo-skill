@@ -21,3 +21,7 @@ The stage 2 narration/cache/scheduling and browser capture tools are also origin
 ## Stage 3 asset and cover methods
 
 The original asset planning/registration and HTML/CSS cover tools were informed by reviewing the locally installed document-illustrator, guizang-material-illustration, seedance-prompt and guizang-social-card-skill workflows. No code, prompts, stylesheets, templates, images or brand assets from those packages are bundled. In particular, no AGPL social-card template is copied into this implementation. Native image services and optional video providers remain separate services with their own terms; generated project media is not part of this repository. The existing Huashu and OFL notices continue to apply to the bundled runtime and fonts.
+
+## Stage 4 SRT packaging and review methods
+
+The original IvanVideo SRT importer, selection bindings, audio-clock review shell, region checks and replacement delivery tools were informed by reviewing `ajiang-video-broll` in https://github.com/NanmiCoder/ajiang-vibe-coding-skills at commit `51aca5391ffe6190e929e2e4af1c439c0d3c2676` (MIT, Copyright (c) 2026 NanmiCoder and contributors). No code, layouts, audio, fonts, screenshots, logos or templates from that repository are bundled. The review shell calls the existing adapted Huashu clip runtime above; its retained MIT and font notices continue to apply. The new Canvas text probe is an original, limited implementation and does not claim full offscreen-text or graphical occlusion coverage.

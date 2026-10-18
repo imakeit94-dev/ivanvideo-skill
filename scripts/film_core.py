@@ -239,6 +239,10 @@ def build_timeline(root):
         raise ValueError("The film renderer currently supports MP4/H.264 only")
     dependencies = {"project.json": digest(root / "project.json"), "storyboard.json": digest(root / "storyboard.json")}
     dependencies.update(verify_generated_narration(root, config))
+    if config.get("broll") is not None:
+        from broll import bound_segments
+        source, _ = bound_segments(root)
+        dependencies["broll_source"] = identity(source)
     shots = board.get("shots")
     if not isinstance(shots, list) or not shots:
         raise ValueError("Film compilation needs a non-empty shots array")

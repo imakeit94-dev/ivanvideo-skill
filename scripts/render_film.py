@@ -17,7 +17,8 @@ def snapshot(root, captions):
     scripts = Path(__file__).parent
     names = ("film_core.py", "compile_timeline.py", "mix_audio.py", "render_film.py",
              "render_animation.py", "animation_spec.py", "validate_video_project.py", "check_video.py",
-             "narrate.py", "schedule_narration.py", "capture_web.py", "asset_workflow.py", "render_covers.py")
+             "narrate.py", "schedule_narration.py", "capture_web.py", "asset_workflow.py", "render_covers.py",
+             "broll.py", "build_broll_preview.py", "deliver_broll.py")
     version = identity({name: digest(scripts / name) for name in names})[:16]
     target = output_path(root, f"scripts/ivanvideo_film/{version}")
     target.mkdir(parents=True, exist_ok=True)

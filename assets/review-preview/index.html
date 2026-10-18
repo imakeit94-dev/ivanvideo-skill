@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IvanVideo · 口播包装审核</title><link rel="stylesheet" href="ui/review.css"></head>
+<body><header><p>IVANVIDEO / REVIEW</p><h1 id="title">口播包装审核</h1>
+<p>拖动检查画面与声音。叠加层仅用于审核，包装交付不包含头像占位或字幕。</p></header>
+<main><section class="viewer"><div id="stage-box"><div id="native-stage">
+<iframe id="engine" title="内置动画画面"></iframe><video id="visual" muted playsinline></video><img id="still" alt="">
+<div id="regions"></div><div id="bounds"></div></div></div>
+<audio id="clock" preload="auto"></audio>
+<div class="controls"><button id="play" disabled>播放 / 暂停</button><input id="scrub" aria-label="预览时间" type="range" min="0" value="0" step="0.033333"><output id="time">加载中</output></div>
+<div class="controls"><label><input type="checkbox" id="overlays" checked>头像与字幕叠加</label><label><input type="checkbox" id="boxes" checked>遮挡提示框</label><button id="save">下载审核意见</button></div>
+<p id="status" role="status">准备画面、字体与声音…</p><div id="warnings"></div></section>
+<aside><h2>镜头导航</h2><nav id="shots"></nav><h2>当前字幕</h2><p id="caption"></p>
+<h2>审核意见</h2><label for="note">记录当前时间的问题</label><textarea id="note" rows="4" placeholder="例如：标题与头像重叠；这句话出现太早"></textarea><button id="mark">保存此时间的意见</button><ol id="notes"></ol>
+<p class="hint">自动提示只检查部分可测文字边界。图形、缓存字形、遮罩和听感需要实际审核；头像位置应按母版测量填写。</p></aside></main>
+<script src="ui/review.js"></script></body></html>

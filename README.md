@@ -30,6 +30,8 @@ IvanVideo 是供 Codex 使用的个人视频制作 Skill，覆盖创意策划、
 | 配图与可选 AI 视频 | 素材计划、提示词、实际可用服务编排、返回文件导入、来源和哈希记录 |
 | 封面 | 横屏、竖屏、方形分别布局，输出 PNG 与保留独立文字的 HTML |
 | 检查与留档 | 工程校验、完整解码、帧数与音轨检查、黑场/静音线索、项目工具快照 |
+| 已有口播包装 | SRT 导入与选段，保留母版时间，声音同步拖动预览、头像/字幕叠加及带时间戳的意见 |
+| 包装片段交付 | 干净 MP4、精确帧数、字幕 ID、母版替换对照表与过期交付校验 |
 
 默认视频规格为 **MP4 / H.264 / 1920×1080 / 30 fps**，可通过项目配置修改尺寸与帧率，支持 16:9、9:16 和 1:1。封面尺寸独立配置，发布前需核实目标平台的实际要求。
 
@@ -89,6 +91,15 @@ git clone https://github.com/imakeit94-dev/ivanvideo-skill.git \
 先检索并核实最近一周的官方发布，记录事件日期、来源和不确定性。
 9:16，使用中文旁白、句级字幕和必要示意配图，不用生成画面冒充新闻实拍。
 工程保存到 ~/media/ai-news，先输出选题、来源、脚本与分镜供我审核。
+```
+
+### D. 为已有口播补动画
+
+```text
+使用 $ivanvideo-skill，为 ~/media/tutorial.mp4 和 ~/media/tutorial.srt 补充动画包装。
+先通读字幕，推荐开场、关键技术解释和总结的区间，保留真实操作段及原旁白时间。
+在新的 ~/media/tutorial-broll 工程中制作可拖动、声音同步的预览，叠加我提供的头像和字幕区域。
+审核后输出干净包装片段与替换对照表，并保留完整工程。
 ```
 
 ## 工作流程
@@ -170,6 +181,7 @@ python3 "${CODEX_HOME:-$HOME/.codex}/skills/ivanvideo-skill/scripts/init_video_p
 | 第一批 | 整片合成、基础混音、中文口播编辑、真实产品证据流程 | 14 项回归与短样片；[第一批记录](references/stage1-validation.md) |
 | 第二批 | 中文 TTS、实测时长排时、字幕同步、真实网页展示 | 累计 27 项回归、17 秒样片、迁移与单句修改；[第二批记录](references/stage2-validation.md) |
 | 第三批 | 配图、可选视频素材、可编辑封面 | 累计 40 项回归、实际生图、三种画幅封面、18 秒样片与迁移重渲；[第三批记录](references/stage3-validation.md) |
+| 第四批 | SRT 选段、声音同步预览、头像/字幕叠加检查、片段替换表 | 累计 56 项回归、实际浏览器拖动/播放、18 秒样片和两段干净交付；[第四批记录](references/stage4-validation.md) |
 
 第三批验证时没有可用的 AI 视频生成服务，因此只验证了请求与提示词、实际编码视频导入及失败输入检查，**未验证 AI 视频提供方的实际生成与下载**。本机软件采集验证也不代表用户的商业产品已经验收。完整试听、跨系统与长片压力等未验证项见各批记录。
 
@@ -181,6 +193,7 @@ python3 "${CODEX_HOME:-$HOME/.codex}/skills/ivanvideo-skill/scripts/init_video_p
 - [中文口播编辑](references/narration-editing.md) · [配音与排时](references/narration-production.md)
 - [真实产品证据](references/product-evidence.md) · [网页采集](references/software-capture.md)
 - [配图与可选 AI 视频](references/asset-production.md) · [封面制作](references/cover-production.md)
+- [SRT 包装、同步预览与片段交付](references/broll-production.md)
 - [质量检查](references/quality-checks.md)
 
 ## 来源与许可
