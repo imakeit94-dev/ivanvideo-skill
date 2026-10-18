@@ -28,6 +28,7 @@ IvanVideo 是供 Codex 使用的个人视频制作 Skill，覆盖创意策划、
 | 真实软件展示 | 实际网页操作、断言、截图、录屏及逐镜头证据绑定 |
 | 声音制作 | 人声、音乐、音效分轨，动作落点、配乐压低、可选响度处理与过期混音检查 |
 | 配图与可选 AI 视频 | 素材计划、提示词、实际可用服务编排、返回文件导入、来源和哈希记录 |
+| 可选视觉方向与参考 | 内置精选方向卡，按需检索有出处的图片/原始提示词，保留原文、衍生提示词与审核状态 |
 | 封面 | 横屏、竖屏、方形分别布局，输出 PNG 与保留独立文字的 HTML |
 | 检查与留档 | 工程校验、完整解码、帧数与音轨检查、黑场/静音线索、项目工具快照 |
 | 已有口播包装 | SRT 导入与选段，保留母版时间，声音同步拖动预览、头像/字幕叠加及带时间戳的意见 |
@@ -112,6 +113,26 @@ git clone https://github.com/imakeit94-dev/ivanvideo-skill.git \
 
 修改意见可按时间戳、镜头 ID 或截图提出。尽量保留已确认内容，复用未变镜头的缓存；最终合成仍可能需要重新编码。
 
+### 可选的视觉方向与配图检索
+
+仍只调用 `$ivanvideo-skill`。需要时由它读取内置精选方向卡，确定构图、光线、材质、配色和标题留白；需要真实案例时再查询已有的 Open Image Prompts 只读运行库。无需另外调用 img-gen-taste 或 img-gen-prompts。
+
+**确认脚本 → 视觉方向 → 按需检索与看图 → 衍生提示词 → 现有素材登记 → 封面与影片。**
+
+方向和来源记录保存在视频工程的 references/ 中，不改变原有 asset-plan.json、封面配置或渲染入口。检索结果保留作者、出处、匹配/缺失约束和不可混改的来源快照；新提示词单独保存。档案图片未实际看过就保持未审核，不能直接选为已确认参考。
+
+图库是可选的独立运行库，不打包进入 Skill。没有数据库、图片打不开或查询无结果时，记录缺口并继续原有制作；不自动下载图片/视频包或安装前端服务。基础工具使用 Python 3.9+，可选图库引擎另需已有 Python >=3.10；可指定解释器。检索不需要模型 API Key，真正生图仍使用当前可用服务。
+
+例如：
+
+```text
+使用 $ivanvideo-skill，为这条技术讲解视频确定配图和封面方向。
+沿用已确认的品牌色，需要时检索有作者和出处的参考；图片打不开就标明，
+不要下载完整图库。保留原有素材登记流程，标题与技术参数独立排版。
+```
+
+详见 [视觉方向与检索流程](references/visual-direction.md)。第三方图片的商业使用权需要单独核实，档案收录不等于授权。
+
 ## Skill 与视频工程
 
 ```text
@@ -182,6 +203,7 @@ python3 "${CODEX_HOME:-$HOME/.codex}/skills/ivanvideo-skill/scripts/init_video_p
 | 第二批 | 中文 TTS、实测时长排时、字幕同步、真实网页展示 | 累计 27 项回归、17 秒样片、迁移与单句修改；[第二批记录](references/stage2-validation.md) |
 | 第三批 | 配图、可选视频素材、可编辑封面 | 累计 40 项回归、实际生图、三种画幅封面、18 秒样片与迁移重渲；[第三批记录](references/stage3-validation.md) |
 | 第四批 | SRT 选段、声音同步预览、头像/字幕叠加检查、片段替换表 | 累计 56 项回归、实际浏览器拖动/播放、18 秒样片和两段干净交付；[第四批记录](references/stage4-validation.md) |
+| 第五批 | 可选视觉方向卡、可追溯配图检索、原始/衍生提示词与旧流程衔接 | 累计 74 项回归、真实检索与缺口、旧工程、18 秒样片及三种封面、迁移重建；[第五批记录](references/stage5-validation.md) |
 
 第三批验证时没有可用的 AI 视频生成服务，因此只验证了请求与提示词、实际编码视频导入及失败输入检查，**未验证 AI 视频提供方的实际生成与下载**。本机软件采集验证也不代表用户的商业产品已经验收。完整试听、跨系统与长片压力等未验证项见各批记录。
 
@@ -193,6 +215,7 @@ python3 "${CODEX_HOME:-$HOME/.codex}/skills/ivanvideo-skill/scripts/init_video_p
 - [中文口播编辑](references/narration-editing.md) · [配音与排时](references/narration-production.md)
 - [真实产品证据](references/product-evidence.md) · [网页采集](references/software-capture.md)
 - [配图与可选 AI 视频](references/asset-production.md) · [封面制作](references/cover-production.md)
+- [可选视觉方向与参考检索](references/visual-direction.md) · [精选方向卡](references/visual-style-cards.md)
 - [SRT 包装、同步预览与片段交付](references/broll-production.md)
 - [质量检查](references/quality-checks.md)
 

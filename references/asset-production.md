@@ -4,6 +4,8 @@
 
 ## 1. 规划与提示词
 
+需要视觉方向或真实案例时先按 [visual-direction.md](visual-direction.md) 选用内置卡片及可选检索；不需要时直接沿用当前流程。方向、来源和衍生提示词放工程独立记录，不向本节 asset-plan.json 添加未知字段。原始参考不自动视为可用素材，实际生成继续使用已有服务与下方登记工具。
+
 工程 `references/asset-plan.json` 示例：
 
 ```json

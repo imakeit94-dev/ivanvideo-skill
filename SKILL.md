@@ -1,11 +1,13 @@
 ---
 name: ivanvideo-skill
-description: Plan and produce editable videos with animation, Chinese narration, real UI capture, assets, covers, captions and mixing. Use for product videos, technology news, technical education, reference analysis, or SRT-based B-roll with audio-synced review and clip delivery.
+description: Plan and produce editable videos with animation, Chinese narration, real UI capture, optional visual direction and traceable image research, covers, captions and mixing. Use for product videos, technology news, technical education, reference analysis, or SRT-based B-roll with audio-synced review and clip delivery.
 ---
 
 # IvanVideo Skill
 
 从需求、素材和参考片开始，完成可审核、可修改的视频工程。用户只需调用本 Skill；动画方法、八种参数化语法及检查工具已内置，无需另装或手动调用 huashu-art-motion。制作文件放在用户选定的工程目录。
+
+配图或封面需要定方向、查真实案例时，按 [visual-direction.md](references/visual-direction.md) 使用内置精选卡和可选只读检索。用户无需调用其他 Skill；图库缺失、图片打不开或无匹配时记录缺口，继续原有素材流程，不自动安装或下载图库。
 
 已有母版与 SRT、只需要补充口播包装时，按 [broll-production.md](references/broll-production.md) 走导入/选段、声音同步预览、叠加检查和片段交付；保留原旁白及时间位置，镜头仍在 storyboard.json 中编辑。
 
@@ -34,6 +36,7 @@ description: Plan and produce editable videos with animation, Chinese narration,
 - [references/narration-production.md](references/narration-production.md)：中文 TTS/导入声音、句子缓存、实测排时、修订备份及同步校验。进入配音时读。
 - [references/software-capture.md](references/software-capture.md)：网页实际采集、操作断言、录屏与逐镜头来源绑定。需要真实网页素材时读。
 - [references/asset-production.md](references/asset-production.md)：配图规划、可选 AI 视频服务、提示词、真实文件导入与逐镜头素材校验。
+- [references/visual-direction.md](references/visual-direction.md)：可选视觉方向卡、参考检索、看图审核、原始/衍生提示词与项目留证；需要配图参考时读。
 - [references/cover-production.md](references/cover-production.md)：三种画幅的封面、可编辑标题、字体与图像留档及检查。
 - [references/broll-production.md](references/broll-production.md)：已有 SRT 和母版的口播包装、可拖动预览、头像/字幕区域和替换对照表。
 
